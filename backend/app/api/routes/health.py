@@ -3,7 +3,12 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
-from ...core.database import database_is_configured, engine
+from ...core.database import (
+    classify_database_error,
+    database_diagnostic,
+    database_is_configured,
+    engine,
+)
 
 router = APIRouter(tags=["system"])
 
@@ -18,25 +23,37 @@ async def health_check() -> dict[str, str | bool]:
 
 @router.get("/db-health")
 async def database_health_check() -> JSONResponse:
+    diagnostic = database_diagnostic()
     if not database_is_configured() or engine is None:
         return JSONResponse(
             status_code=503,
             content={
                 "success": False,
-                "error": {"message": "Database connection failed"},
+                "error": {
+                    "message": "Database connection failed",
+                    "category": "PostgreSQL driver/configuration failure",
+                    "sqlstate": None,
+                    **diagnostic,
+                },
             },
         )
 
     try:
         with engine.connect() as connection:
             connection.execute(text("SELECT 1"))
-    except SQLAlchemyError:
-        # Never include connection details in logs or responses.
+    except SQLAlchemyError as exc:
+        category, sqlstate = classify_database_error(exc)
+        # Never include the raw exception or connection details in logs or responses.
         return JSONResponse(
             status_code=503,
             content={
                 "success": False,
-                "error": {"message": "Database connection failed"},
+                "error": {
+                    "message": "Database connection failed",
+                    "category": category,
+                    "sqlstate": sqlstate,
+                    **diagnostic,
+                },
             },
         )
 
@@ -45,5 +62,6 @@ async def database_health_check() -> JSONResponse:
         content={
             "success": True,
             "message": "Database connection successful",
+            "diagnostic": diagnostic,
         },
     )
