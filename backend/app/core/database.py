@@ -1,4 +1,8 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from collections.abc import Generator
 from importlib.util import find_spec
 from re import fullmatch
