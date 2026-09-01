@@ -1,0 +1,265 @@
+We are building a Smart India Hackathon 2026 project called SkillBridge.
+
+PROJECT TOPIC:
+"Academic–Industry Collaboration for Skill Development, Internship and Placement"
+
+I am starting completely from zero. There is currently no existing frontend, backend, or database that needs to be preserved.
+
+IMPORTANT:
+Build this project step-by-step. DO NOT attempt to build the entire application in one task.
+
+For this first task ONLY, create the basic project foundation.
+
+TECHNOLOGY STACK:
+
+Frontend:
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- shadcn/ui
+- Lucide React
+- React Router
+- Recharts
+- TanStack Query
+- Zustand
+- React Hook Form
+- Zod
+
+Backend:
+- Python
+- FastAPI
+- Pydantic
+- SQLAlchemy
+- PostgreSQL-ready architecture
+- JWT authentication later
+- bcrypt password hashing later
+
+Database:
+- PostgreSQL using the free Supabase tier later.
+
+IMPORTANT COST REQUIREMENT:
+This entire project must be developed and demonstrated at ₹0 cost.
+Do not require paid APIs, paid AI APIs, paid hosting, paid databases, or a paid domain.
+Use free/open-source technologies wherever possible.
+
+========================================
+FIRST TASK — PROJECT FOUNDATION ONLY
+========================================
+
+Create a clean full-stack project with clearly separated frontend and backend.
+
+Recommended structure:
+
+/
+  frontend/
+  backend/
+
+Do not put the entire application in one file.
+
+========================================
+FRONTEND
+========================================
+
+Create a React + TypeScript + Vite frontend.
+
+Configure:
+- Tailwind CSS
+- shadcn/ui
+- Lucide React
+- React Router
+
+Create a professional initial landing page for SkillBridge.
+
+The landing page should contain:
+
+HEADER:
+- SkillBridge logo/name
+- Home
+- About
+- Features
+- Login
+- Join Platform
+
+HERO:
+Title:
+"Bridge the Gap Between Academia and Industry"
+
+Subtitle:
+"Empowering students with industry-driven skills, internships and placement opportunities through intelligent academic–industry collaboration."
+
+Primary button:
+"Join the Platform"
+
+Secondary button:
+"Explore How It Works"
+
+THREE ROLE CARDS:
+
+Student
+"Build skills, discover opportunities and get matched with internships and placements."
+
+Academia
+"Understand industry skill demands and align curriculum with emerging workforce requirements."
+
+Industry
+"Share skill requirements and discover verified, job-ready student talent."
+
+HOW IT WORKS:
+
+Industry Demand
+→ Skill Gap Analysis
+→ Skill Development
+→ Skill Verification
+→ Internship
+→ Placement
+
+CORE FEATURES:
+
+- Intelligent Skill Mapping
+- Industry Skill Demand
+- Curriculum Gap Analysis
+- Verified Skills & Credentials
+- Internship & Placement Portal
+- Intelligent Candidate Matching
+- Placement Analytics
+
+Make the page:
+- modern
+- professional
+- responsive
+- mobile-friendly
+- accessible
+- suitable for a Smart India Hackathon presentation
+
+Use reusable React components.
+
+Do not use lorem ipsum.
+
+========================================
+BACKEND
+========================================
+
+Create a FastAPI backend.
+
+Structure:
+
+backend/
+  app/
+    __init__.py
+    main.py
+    api/
+      __init__.py
+      routes/
+    core/
+    models/
+    schemas/
+    services/
+    utils/
+
+Create:
+
+GET /api/health
+
+Response:
+
+{
+  "success": true,
+  "message": "SkillBridge API is running"
+}
+
+Configure CORS so the React frontend can communicate with FastAPI.
+
+Create requirements.txt with the necessary free/open-source dependencies.
+
+Create:
+
+.env.example
+
+with:
+
+DATABASE_URL=
+JWT_SECRET=
+JWT_REFRESH_SECRET=
+FRONTEND_URL=
+PORT=
+
+Never put real secrets into source code.
+
+Enable FastAPI Swagger documentation at:
+
+/docs
+
+Add basic centralized error handling.
+
+========================================
+DO NOT BUILD THESE YET
+========================================
+
+Do NOT implement:
+
+- Login
+- Signup
+- OAuth
+- PostgreSQL tables
+- Student profiles
+- Academia dashboards
+- Industry dashboards
+- Skill matching
+- Jobs
+- Internships
+- Applications
+- Resume uploads
+- Certifications
+- Messaging
+- Notifications
+- Advanced analytics
+
+We will implement these one by one.
+
+========================================
+TEAM BACKEND
+========================================
+
+A teammate has already created a Python prototype for the skill-mapping system.
+
+The files are:
+
+main.py
+student.py
+students.json
+
+I will upload those files later.
+
+When they are uploaded:
+- preserve the useful business logic
+- do not discard it
+- convert the logic into FastAPI services
+- do not replace it with Node.js
+
+========================================
+QUALITY CHECK
+========================================
+
+After completing this first task:
+
+1. Start the React frontend.
+2. Verify the landing page works.
+3. Start the FastAPI backend.
+4. Verify GET /api/health works.
+5. Verify /docs works.
+6. Fix any errors.
+
+Do not proceed to additional features automatically.
+
+At the end, report:
+- Project structure
+- Frontend start command
+- Backend start command
+- Frontend URL
+- Backend URL
+- Whether /api/health works
+- Whether /docs works
+- Any errors remaining
+
+STOP after completing this task.

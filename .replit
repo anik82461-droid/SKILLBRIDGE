@@ -1,0 +1,53 @@
+modules = ["nodejs-24", "python-base-3.13"]
+
+[nix]
+channel = "stable-25_05"
+packages = ["libxcrypt", "postgresql"]
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "SkillBridge Frontend"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "SkillBridge Backend"
+
+[[workflows.workflow]]
+name = "SkillBridge Frontend"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow]]
+name = "SkillBridge Backend"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python -m uvicorn backend.app.main:app --host 0.0.0.0 --port 8000"
+waitForPort = 8000
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[[ports]]
+localPort = 8000
+externalPort = 8000
