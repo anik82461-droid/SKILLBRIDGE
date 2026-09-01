@@ -10,4 +10,5 @@ __pycache__/
 .ruff_cache/
 .venv/
 .python-version
-frontend/.vite/
+frontend/.vite/attached_assets/Pasted-*.txt
+attached_assets/Pasted-STEP-4-BUILD-THE-COMPLETE-SKILLBRIDGE-SIH-MVP-IMPORTANT_1788279762530.txt
