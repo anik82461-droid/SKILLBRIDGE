@@ -1,0 +1,326 @@
+STEP 2 — INTEGRATE THE EXISTING PYTHON SKILL-MAPPING PROTOTYPE
+
+We have completed the initial SkillBridge project foundation.
+
+Current status:
+- React frontend is running
+- FastAPI backend is running
+- GET /api/health works
+- FastAPI /docs works
+- Frontend build passes
+
+Now I have uploaded an existing Python prototype created by a teammate.
+
+The prototype contains files similar to:
+
+- main.py
+- student.py
+- students.json
+
+IMPORTANT:
+
+DO NOT delete the existing FastAPI backend.
+DO NOT delete the existing React frontend.
+DO NOT replace the project architecture.
+DO NOT use Node.js.
+DO NOT discard the teammate's business logic.
+
+First inspect all uploaded teammate Python files carefully.
+
+The purpose of this task is to preserve the useful skill-mapping and internship-matching logic and integrate it into our FastAPI backend.
+
+==================================================
+EXISTING BUSINESS LOGIC TO PRESERVE
+==================================================
+
+The teammate prototype contains logic related to:
+
+- Student creation
+- Student skills
+- Available skills
+- Career/domain recommendation
+- Skill-gap identification
+- Internship matching
+- Match percentage calculation
+- Missing-skill identification
+
+Reuse this logic where appropriate.
+
+Do not blindly copy command-line code into API routes.
+
+Refactor reusable business logic into:
+
+backend/app/services/
+
+For example:
+
+backend/app/services/skill_matching.py
+
+==================================================
+CREATE THESE INITIAL API ENDPOINTS
+==================================================
+
+1. GET /api/health
+
+Keep the existing endpoint working.
+
+2. POST /api/students
+
+Create a student profile.
+
+Example request:
+
+{
+  "name": "Rahul Sharma",
+  "email": "rahul@example.com",
+  "college": "ABC Engineering College",
+  "branch": "Computer Science",
+  "year": 3,
+  "skills": ["Python", "SQL", "Web Development"]
+}
+
+3. GET /api/students
+
+Return the available student profiles.
+
+4. GET /api/students/{student_id}
+
+Return one student.
+
+5. POST /api/skill-match
+
+Request:
+
+{
+  "student_skills": ["Python", "SQL", "Java"],
+  "required_skills": ["Python", "SQL", "React", "Docker"]
+}
+
+Response should contain:
+
+{
+  "success": true,
+  "data": {
+    "match_percentage": 50,
+    "matched_skills": ["Python", "SQL"],
+    "missing_skills": ["React", "Docker"]
+  }
+}
+
+The percentage must be calculated by actual backend logic.
+
+Do NOT hardcode the result.
+
+==================================================
+INTERNSHIP DEMO API
+==================================================
+
+Create a small initial internship dataset based on the existing prototype logic.
+
+Create:
+
+GET /api/internships
+
+Each internship should contain:
+
+- id
+- title
+- company
+- location
+- type
+- stipend
+- required_skills
+- duration
+
+Create:
+
+GET /api/internships/{internship_id}
+
+Create:
+
+POST /api/internships/{internship_id}/match
+
+The endpoint should calculate the student's skill match against the internship's required skills.
+
+Example response:
+
+{
+  "success": true,
+  "data": {
+    "internship": {},
+    "match_percentage": 75,
+    "matched_skills": [],
+    "missing_skills": []
+  }
+}
+
+==================================================
+SKILL MATCHING RULE
+==================================================
+
+For the initial MVP, use a transparent and explainable matching formula:
+
+match_percentage =
+(number of matched required skills / total required skills) * 100
+
+Round to the nearest whole number.
+
+Normalize skill comparison so that:
+
+"Python"
+"python"
+" PYTHON "
+
+are treated as the same skill.
+
+Return both matched and missing skills.
+
+Do not use an external AI API.
+
+Do not use OpenAI.
+
+Do not require any paid service.
+
+==================================================
+PYDANTIC SCHEMAS
+==================================================
+
+Create proper Pydantic request/response schemas.
+
+Do not accept arbitrary unvalidated JSON.
+
+Organize schemas inside:
+
+backend/app/schemas/
+
+==================================================
+ROUTES
+==================================================
+
+Organize FastAPI routes cleanly inside:
+
+backend/app/api/routes/
+
+Do not put all endpoints in main.py.
+
+==================================================
+ERROR HANDLING
+==================================================
+
+Use the existing standardized API response format:
+
+Success:
+
+{
+  "success": true,
+  "data": {}
+}
+
+Error:
+
+{
+  "success": false,
+  "error": {
+    "message": "..."
+  }
+}
+
+Handle:
+- Invalid student data
+- Invalid internship ID
+- Empty skill lists
+- Invalid skill-match requests
+
+==================================================
+IMPORTANT DATA REQUIREMENT
+==================================================
+
+For this step, DO NOT require PostgreSQL yet.
+
+Use a clean temporary in-memory/demo repository if necessary.
+
+We will connect PostgreSQL/Supabase in the next step.
+
+Do not spend time configuring production database infrastructure now.
+
+==================================================
+TESTING
+==================================================
+
+After implementation, test all of these:
+
+GET /api/health
+
+POST /api/students
+
+GET /api/students
+
+GET /api/students/{id}
+
+POST /api/skill-match
+
+GET /api/internships
+
+GET /api/internships/{id}
+
+POST /api/internships/{id}/match
+
+Also verify:
+
+/docs
+
+All endpoints must appear in Swagger.
+
+Test at least these skills:
+
+Student:
+Python, SQL, Java
+
+Required:
+Python, SQL, React, Docker
+
+Expected:
+
+Matched:
+Python, SQL
+
+Missing:
+React, Docker
+
+Match:
+50%
+
+==================================================
+DO NOT BUILD YET
+==================================================
+
+Do NOT implement:
+
+- Authentication
+- OAuth
+- PostgreSQL
+- Resume uploads
+- Certifications
+- Messaging
+- Notifications
+- Advanced analytics
+- Full dashboards
+- Application tracking
+
+Those will be built in later steps.
+
+==================================================
+
+At the end, report:
+
+1. Which teammate files were inspected.
+2. Which business logic was reused.
+3. Files created/modified.
+4. API endpoints created.
+5. Test results.
+6. Whether the frontend still works.
+7. Whether /api/health still works.
+8. Whether /docs works.
+9. Any remaining errors.
+
+STOP after completing STEP 2.

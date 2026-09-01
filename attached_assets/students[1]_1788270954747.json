@@ -1,0 +1,56 @@
+[
+    {
+        "name": "anjali",
+        "python": "yes",
+        "sql": "yes",
+        "java": "yes",
+        "web": "no",
+        "data": "no",
+        "communication": "good"
+    },
+    {
+        "name": "priya",
+        "python": "yes",
+        "sql": "yes",
+        "java": "yes",
+        "web": "no",
+        "data": "no",
+        "communication": "good"
+    },
+    {
+        "name": "riya",
+        "python": "yes",
+        "sql": "yes",
+        "java": "yes",
+        "web": "no",
+        "data": "no",
+        "communication": "good"
+    },
+    {
+        "name": "anjali",
+        "python": "yes",
+        "sql": "yes",
+        "java": "yes",
+        "web": "no",
+        "data": "no",
+        "communication": "good"
+    },
+    {
+        "name": "anjali",
+        "python": "yes",
+        "sql": "yes",
+        "java": "yes",
+        "web": "no",
+        "data": "no",
+        "communication": "good"
+    },
+    {
+        "name": "anjali",
+        "python": "yes",
+        "sql": "yes",
+        "java": "yes",
+        "web": "no",
+        "data": "no",
+        "communication": "good"
+    }
+]

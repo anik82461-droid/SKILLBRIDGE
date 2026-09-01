@@ -1,0 +1,1 @@
+"""Demo data used by the temporary in-memory repository."""
