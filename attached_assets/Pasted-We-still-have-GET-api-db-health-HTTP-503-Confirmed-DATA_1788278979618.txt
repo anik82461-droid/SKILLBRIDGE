@@ -1,0 +1,157 @@
+We still have:
+
+GET /api/db-health → HTTP 503
+
+Confirmed:
+- DATABASE_URL exists
+- URL format is valid
+- username present
+- password present
+- host present
+- port present
+- database present
+- psycopg 3 installed
+- postgresql+psycopg:// is being used
+- SSL is required
+- FastAPI itself works
+
+Do NOT change application functionality.
+Do NOT create database tables.
+Do NOT change the frontend.
+Do NOT reset the Supabase password.
+Do NOT expose any secret.
+
+We need to determine whether the Replit environment can reach the Supabase PostgreSQL pooler.
+
+================================================
+TEST 1 — DNS
+================================================
+
+Read the hostname from DATABASE_URL internally.
+
+Resolve the hostname using Python socket/DNS.
+
+Do NOT print the hostname.
+
+Report only:
+
+DNS resolution:
+SUCCESS or FAILED
+
+If failed, report only the exception class/category.
+
+================================================
+TEST 2 — TCP
+================================================
+
+Using the host and port from DATABASE_URL internally, attempt a TCP connection with a 10-second timeout.
+
+Do NOT print host, IP address, port, or credentials.
+
+Report only:
+
+TCP connection:
+SUCCESS or FAILED
+
+If failed, report only a safe category such as:
+
+- timeout
+- connection refused
+- network unreachable
+- DNS failure
+- other
+
+================================================
+TEST 3 — DIRECT PSYCOPG CONNECTION
+================================================
+
+Using DATABASE_URL internally, attempt a minimal psycopg 3 connection.
+
+Do NOT print the connection string.
+
+Do NOT print the exception's raw message.
+
+Capture only safe diagnostic metadata:
+
+- exception class
+- SQLSTATE if available
+- errno if available
+- category
+
+For PostgreSQL authentication errors, report:
+
+authentication_failure
+
+For SSL errors:
+
+ssl_failure
+
+For network errors:
+
+network_failure
+
+For timeout:
+
+timeout
+
+For DNS:
+
+dns_failure
+
+For database errors:
+
+database_failure
+
+Otherwise:
+
+unknown
+
+================================================
+TEST 4 — VERIFY SUPABASE URL SOURCE
+================================================
+
+Do not modify DATABASE_URL.
+
+Safely inspect whether the current URL uses:
+
+- pooler.supabase.com
+- port 5432
+- PostgreSQL database name
+
+Report only YES/NO.
+
+================================================
+IMPORTANT
+================================================
+
+Do NOT attempt to guess or modify the password.
+
+Do NOT print:
+- DATABASE_URL
+- password
+- username
+- hostname
+- IP address
+- connection string
+
+Do NOT create any database tables.
+
+Do NOT change frontend code.
+
+Do NOT make unrelated changes.
+
+================================================
+FINAL REPORT
+================================================
+
+Return only:
+
+DNS: SUCCESS/FAILED
+TCP: SUCCESS/FAILED
+PSYCOPG: SUCCESS/FAILED
+PSYCOPG exception class: ...
+SQLSTATE: ... or unavailable
+Error category: ...
+Pooler host detected: YES/NO
+Port 5432 detected: YES/NO
+PostgreSQL database detected: YES/NO
