@@ -33,9 +33,14 @@ The current MVP uses an in-memory repository seeded from the teammate's demo
 student data. Data resets when the backend restarts; PostgreSQL is intentionally
 reserved for the next milestone.
 
+The backend now includes a connection-only PostgreSQL probe at
+`GET /api/db-health`. It reads `DATABASE_URL` from the environment and does not
+create tables or persist application data yet.
+
 | Method | Endpoint | Purpose |
 | --- | --- | --- |
 | GET | `/api/health` | Confirm the API is running |
+| GET | `/api/db-health` | Safely check the PostgreSQL connection |
 | POST | `/api/students` | Create a validated student profile |
 | GET | `/api/students` | List student profiles |
 | GET | `/api/students/{student_id}` | Get one student profile |

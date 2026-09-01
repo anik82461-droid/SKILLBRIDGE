@@ -1,0 +1,188 @@
+STEP 3B — CONNECT SKILLBRIDGE FASTAPI TO SUPABASE POSTGRESQL
+
+We have completed the following:
+
+- React + TypeScript frontend is working.
+- FastAPI backend is working.
+- Teammate's Python skill-mapping prototype has been integrated.
+- Replit Secrets now contains:
+  - SESSION_SECRET
+  - DATABASE_URL
+- DATABASE_URL contains the Supabase PostgreSQL connection string.
+
+IMPORTANT SECURITY RULES:
+
+1. Never print, expose, log, or display the value of DATABASE_URL.
+2. Never print the database password.
+3. Never hardcode DATABASE_URL in source code.
+4. Read DATABASE_URL only from environment variables.
+5. Do not commit secrets to Git.
+6. Do not create a .env file containing real credentials.
+7. Do not ask me to paste the secret into chat.
+
+==================================================
+TASK 1 — DATABASE DEPENDENCIES
+==================================================
+
+Make sure the backend has the required dependencies for:
+
+- FastAPI
+- Uvicorn
+- SQLAlchemy
+- PostgreSQL / psycopg2
+- Pydantic
+- python-dotenv or equivalent environment configuration
+
+Update:
+
+backend/requirements.txt
+
+Do not remove existing dependencies that are still required.
+
+==================================================
+TASK 2 — DATABASE CONFIGURATION
+==================================================
+
+Create:
+
+backend/app/core/database.py
+
+Use SQLAlchemy.
+
+Read:
+
+DATABASE_URL
+
+from the environment.
+
+Create:
+
+- SQLAlchemy engine
+- SessionLocal / session factory
+- Base declarative class
+- get_db dependency
+
+Do not hardcode credentials.
+
+Use a PostgreSQL-compatible SQLAlchemy URL.
+
+==================================================
+TASK 3 — DATABASE CONNECTION TEST
+==================================================
+
+Create a safe backend endpoint:
+
+GET /api/db-health
+
+It should test whether the backend can establish a connection to PostgreSQL.
+
+SUCCESS response:
+
+{
+  "success": true,
+  "message": "Database connection successful"
+}
+
+FAILURE response:
+
+{
+  "success": false,
+  "error": {
+    "message": "Database connection failed"
+  }
+}
+
+IMPORTANT:
+
+Never include:
+- DATABASE_URL
+- password
+- hostname
+- username
+- credentials
+
+in the response.
+
+==================================================
+TASK 4 — DO NOT CREATE THE FULL SCHEMA YET
+==================================================
+
+Do NOT create all SkillBridge database tables yet.
+
+Do NOT create:
+
+- users
+- students
+- academia
+- industry
+- skills
+- jobs
+- internships
+- applications
+- interviews
+- projects
+- certifications
+- notifications
+
+We will design the database schema carefully in the next step.
+
+For this task, only establish the database connection.
+
+==================================================
+TASK 5 — PRESERVE EXISTING FUNCTIONALITY
+==================================================
+
+Do not break:
+
+GET /api/health
+
+The existing skill-matching APIs must continue working.
+
+The React frontend must continue working.
+
+==================================================
+TASK 6 — TEST
+==================================================
+
+Run the backend.
+
+Test:
+
+GET /api/health
+
+GET /api/db-health
+
+Open:
+
+/docs
+
+Make sure both endpoints appear in Swagger.
+
+Also run the frontend and make sure it still works.
+
+If the database connection fails:
+
+- diagnose the problem
+- do not expose the secret
+- fix the configuration if possible
+- do not replace DATABASE_URL with a hardcoded value
+
+==================================================
+STOP
+==================================================
+
+Do not implement authentication, database models, jobs, applications, dashboards, or any other new feature.
+
+Only complete the PostgreSQL connection and testing.
+
+At the end report:
+
+1. Whether DATABASE_URL was detected (say only yes/no, never print it)
+2. Whether PostgreSQL connection succeeded
+3. Whether /api/health works
+4. Whether /api/db-health works
+5. Whether /docs works
+6. Whether frontend still works
+7. Any errors remaining
+
+STOP after this task.
