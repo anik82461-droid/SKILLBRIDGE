@@ -1,0 +1,119 @@
+We have confirmed:
+
+DNS: SUCCESS
+TCP: SUCCESS
+PSYCOPG 3: FAILED
+Exception: OperationalError
+SQLSTATE: unavailable
+Category: unknown
+
+Therefore the network path to the Supabase pooler is working.
+
+Do NOT change the DATABASE_URL secret.
+Do NOT reset the password.
+Do NOT create database tables.
+Do NOT modify the frontend.
+Do NOT make unrelated changes.
+
+We need to identify exactly why psycopg fails after TCP connection.
+
+================================================
+TASK 1 — DIRECT PSYCOPG DIAGNOSTIC
+================================================
+
+Use the existing DATABASE_URL internally.
+
+Attempt a direct psycopg 3 connection with:
+
+- connect_timeout=10
+- sslmode=require
+
+Do not print the connection string.
+
+Catch psycopg.Error and inspect safe structured attributes only:
+
+- exception class
+- sqlstate
+- pgcode
+- pgerror availability
+- errno if available
+- __cause__ exception class
+- __context__ exception class
+
+DO NOT print raw exception messages because they may contain credentials or connection information.
+
+================================================
+TASK 2 — CLASSIFY THE ERROR
+================================================
+
+Map the result to one of:
+
+AUTHENTICATION_FAILURE
+SSL_FAILURE
+DATABASE_NOT_FOUND
+ROLE_NOT_FOUND
+PERMISSION_DENIED
+POOLER_ERROR
+SERVER_ERROR
+CONNECTION_CLOSED
+CONNECTION_TIMEOUT
+PROTOCOL_ERROR
+DRIVER_ERROR
+UNKNOWN
+
+If SQLSTATE is available, use PostgreSQL SQLSTATE classification.
+
+Important examples:
+
+28xxx = authentication/authorization
+3Dxxx = invalid catalog/database
+08xxx = connection exception
+57xxx = operator/server state
+================================================
+TASK 3 — CHECK URL PASSWORD SAFELY
+================================================
+
+Do not print the password.
+
+Determine only:
+
+- password exists: YES/NO
+- password contains URL-reserved characters: YES/NO
+- password appears URL-encoded: YES/NO
+
+Do not reveal which characters are present.
+
+================================================
+TASK 4 — VERIFY SQLALCHEMY DIALECT
+================================================
+
+Report only:
+
+SQLAlchemy dialect:
+postgresql+psycopg
+
+Driver:
+psycopg 3
+
+================================================
+FINAL REPORT
+================================================
+
+Return only:
+
+PSYCOPG connection: SUCCESS/FAILED
+Exception class: ...
+SQLSTATE: ...
+Category: ...
+Password present: YES/NO
+Password requires URL encoding: YES/NO
+SQLAlchemy dialect: ...
+Driver: ...
+
+Do not print:
+- DATABASE_URL
+- password
+- username
+- hostname
+- IP address
+- raw PostgreSQL error text
