@@ -2,11 +2,11 @@ import os
 from collections.abc import Generator
 from importlib.util import find_spec
 from re import fullmatch
-from typing import Any
 
 from sqlalchemy import create_engine
 from sqlalchemy.engine import URL, make_url
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+from sqlalchemy.pool import NullPool
 
 
 SUPPORTED_DATABASE_SCHEMES = (
@@ -17,15 +17,14 @@ SUPPORTED_DATABASE_SCHEMES = (
 )
 
 FAILURE_CATEGORIES = (
-    "DNS/hostname resolution failure",
-    "TCP/network connection failure",
-    "Connection timeout",
-    "SSL/TLS failure",
-    "PostgreSQL authentication failure",
-    "PostgreSQL database does not exist",
-    "PostgreSQL permission failure",
-    "PostgreSQL driver/configuration failure",
-    "Unknown OperationalError",
+    "DNS failure",
+    "network failure",
+    "timeout",
+    "SSL failure",
+    "authentication failure",
+    "database failure",
+    "driver failure",
+    "unknown",
 )
 
 
@@ -94,37 +93,42 @@ def classify_database_error(error: BaseException) -> tuple[str, str | None]:
 
     if sqlstate:
         if sqlstate.startswith("28"):
-            return "PostgreSQL authentication failure", sqlstate
-        if sqlstate == "3D000":
-            return "PostgreSQL database does not exist", sqlstate
-        if sqlstate == "42501":
-            return "PostgreSQL permission failure", sqlstate
+            return "authentication failure", sqlstate
+        if sqlstate in {"3D000", "42501"}:
+            return "database failure", sqlstate
         if sqlstate.startswith("08"):
-            return "TCP/network connection failure", sqlstate
+            return "network failure", sqlstate
 
     if any(signal in message for signal in ("could not translate host", "name or service not known", "nodename nor servname")):
-        return "DNS/hostname resolution failure", sqlstate
+        return "DNS failure", sqlstate
     if any(signal in message for signal in ("timeout", "timed out")):
-        return "Connection timeout", sqlstate
+        return "timeout", sqlstate
     if any(signal in message for signal in ("ssl", "tls", "certificate")):
-        return "SSL/TLS failure", sqlstate
+        return "SSL failure", sqlstate
     if any(signal in message for signal in ("password authentication", "authentication failed", "invalid password", "tenant or user not found")):
-        return "PostgreSQL authentication failure", sqlstate
+        return "authentication failure", sqlstate
     if any(signal in message for signal in ("database does not exist", "invalid_catalog_name")):
-        return "PostgreSQL database does not exist", sqlstate
+        return "database failure", sqlstate
     if any(signal in message for signal in ("permission denied", "insufficient privilege")):
-        return "PostgreSQL permission failure", sqlstate
+        return "database failure", sqlstate
     if any(signal in message for signal in ("no module named", "invalid dsn", "could not load", "unsupported")):
-        return "PostgreSQL driver/configuration failure", sqlstate
+        return "driver failure", sqlstate
     if any(signal in message for signal in ("connection refused", "network is unreachable", "connection reset", "server closed the connection")):
-        return "TCP/network connection failure", sqlstate
-    return "Unknown OperationalError", sqlstate
+        return "network failure", sqlstate
+    return "unknown", sqlstate
 
 
 SQLALCHEMY_DATABASE_URL = _get_sqlalchemy_url()
 engine = (
-    create_engine(SQLALCHEMY_DATABASE_URL, pool_pre_ping=True)
+    create_engine(
+        SQLALCHEMY_DATABASE_URL,
+        poolclass=NullPool,
+        pool_pre_ping=True,
+        connect_args={"sslmode": "require", "connect_timeout": 10},
+    )
     if SQLALCHEMY_DATABASE_URL
+    and database_url_format_is_valid()
+    and postgres_driver_is_installed()
     else None
 )
 SessionLocal = (
@@ -140,15 +144,6 @@ class Base(DeclarativeBase):
 
 def database_is_configured() -> bool:
     return engine is not None
-
-
-def database_diagnostic() -> dict[str, Any]:
-    """Return only safe, non-secret connection diagnostics."""
-    _, format_is_valid = _parse_database_url()
-    return {
-        "database_url_format_valid": format_is_valid,
-        "postgresql_driver_installed": postgres_driver_is_installed(),
-    }
 
 
 def get_db() -> Generator[Session, None, None]:

@@ -5,7 +5,6 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from ...core.database import (
     classify_database_error,
-    database_diagnostic,
     database_is_configured,
     engine,
 )
@@ -23,7 +22,6 @@ async def health_check() -> dict[str, str | bool]:
 
 @router.get("/db-health")
 async def database_health_check() -> JSONResponse:
-    diagnostic = database_diagnostic()
     if not database_is_configured() or engine is None:
         return JSONResponse(
             status_code=503,
@@ -31,9 +29,7 @@ async def database_health_check() -> JSONResponse:
                 "success": False,
                 "error": {
                     "message": "Database connection failed",
-                    "category": "PostgreSQL driver/configuration failure",
-                    "sqlstate": None,
-                    **diagnostic,
+                    "category": "driver failure",
                 },
             },
         )
@@ -51,8 +47,6 @@ async def database_health_check() -> JSONResponse:
                 "error": {
                     "message": "Database connection failed",
                     "category": category,
-                    "sqlstate": sqlstate,
-                    **diagnostic,
                 },
             },
         )
@@ -62,6 +56,5 @@ async def database_health_check() -> JSONResponse:
         content={
             "success": True,
             "message": "Database connection successful",
-            "diagnostic": diagnostic,
         },
     )
