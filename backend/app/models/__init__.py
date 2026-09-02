@@ -1,1 +1,4 @@
-"""Database models will be added in a later milestone."""
+from .internship import Internship
+from .student import Student
+
+__all__ = ["Internship", "Student"]

@@ -66,7 +66,7 @@ def recommend_career_domain(skills: list[str]) -> tuple[str, str]:
     if {"python", "data analysis"} <= skill_keys:
         return "Data Science / Data Analysis", "Data Analyst Intern"
     if {"python", "sql"} <= skill_keys:
-        return "Backend / Software Development", "Python Developer Intern"
+        return "Software Development", "Python Developer Intern"
     if {"java", "sql"} <= skill_keys:
         return "Java Development", "Java Developer Intern"
     if "web development" in skill_keys:
