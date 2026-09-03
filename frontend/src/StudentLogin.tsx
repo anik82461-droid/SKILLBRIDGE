@@ -48,7 +48,9 @@ export default function StudentLogin({
     setStudent(null);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/students`);
+      const response = await fetch(
+        "https://skillbridge-1-vn1o.onrender.com/api/students",
+      );
 
       if (!response.ok) {
         throw new Error("Unable to connect to SkillBridge.");
