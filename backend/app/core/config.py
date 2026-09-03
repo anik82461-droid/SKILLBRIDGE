@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     database_url: str = ""
     jwt_secret: str = ""
     jwt_refresh_secret: str = ""
-    frontend_url: str = "http://localhost:5000"
+    frontend_url: str = "https://skillbridge-sooty-five.vercel.app"
     port: int = 8000
 
     model_config = SettingsConfigDict(
